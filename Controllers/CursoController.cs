@@ -17,6 +17,7 @@ namespace apiUniversidade.Controllers
         {
             _logger = logger;
         }
+        
         [HttpGet]
 
         public ActionResult<IEnumerable<Cursos>> Get()
