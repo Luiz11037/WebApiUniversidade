@@ -17,15 +17,19 @@ namespace apiUniversidade.Controllers
         {
             _logger = logger;
         }
-        [HttpGet]
+        [HttpGet(Name = "alunos")]
+        public List<Aluno> getAluno(){
+            List<Aluno> alunos = new List<Aluno>();
 
-        public ActionResult<IEnumerable<Cursos>> Get()
-        {
-            var cursos = context.Cursos.ToList();
-            if(cursos is null)
-                return NotFound();
+            Aluno a1 = new Aluno();
+            a1.Nome = "Isaac";
+            a1.Id = 2020;
+            a1.DataNascimento = "31-05-2005";
+            a1.CPF = "xxx.xxx.xxx-xx";
+
+            alunos.Add(a1);
             
-            return cursos;
+            return alunos;
         }
     }
 }
