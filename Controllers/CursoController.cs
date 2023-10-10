@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using apiUniversidade.Model;
 using Microsoft.AspNetCore.Mvc;
+using apiUniversidade.Context;
 
 namespace apiUniversidade.Controllers
 {
@@ -11,10 +12,10 @@ namespace apiUniversidade.Controllers
     [Route("[controller]")]
     public class CursoController : Controller
     {
-       private reandonly ILogger<CursoController> _logger;
-       private reandonly apiUniversidade _context;
+       private readonly ILogger<CursoController> _logger;
+       private readonly apiUniversidadeContext _context;
 
-       public CursoController(ILogger<CursoController> logger , apiUniversidade context)
+       public CursoController(ILogger<CursoController> logger , apiUniversidadeContext context)
        {
         _logger = logger;
         _context = context;
@@ -22,9 +23,9 @@ namespace apiUniversidade.Controllers
        
         [HttpGet]
 
-        public ActionResult<IEnumerable<Cursos>> Get()
+        public ActionResult<IEnumerable<Curso>> Get()
         {
-            var cursos = context.Cursos.ToList();
+            var cursos = _context.Cursos.ToList();
             if(cursos is null)
                 return NotFound();
             
