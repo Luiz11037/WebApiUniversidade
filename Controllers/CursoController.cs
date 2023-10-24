@@ -50,5 +50,17 @@ namespace apiUniversidade.Controllers
             new{ id = curso.Id},
             curso);
         }
+
+        [HttpPut("{id:int}")]
+        public ActionResult Put(int id, Curso curso) 
+        {
+            if(id != curso.Id)
+            return BadRequest();
+
+            _context.Entry(curso).State = Microsoft.EntityFrameworkCore.EntityState.Modified;
+            _context.SaveChanges();
+            return Ok(curso);
+        }
+
     }
 }
