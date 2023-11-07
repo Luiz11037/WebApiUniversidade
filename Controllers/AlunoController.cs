@@ -62,7 +62,7 @@ namespace apiUniversidade.Controllers
             return Ok(aluno);
         }
 
-        [HttpDelete]
+        [HttpDelete("{id:int}")]
         public ActionResult Delete(int id)
         {
             var aluno = _context.Alunos.FirstOrDefault(p => p.Id == id);
