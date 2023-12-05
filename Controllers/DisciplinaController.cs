@@ -24,7 +24,7 @@ namespace apiUniversidade.Controllers
        [HttpGet]
        public ActionResult<IEnumerable<Disciplina>> Get()
        {
-        var disciplina = _context.Disciplinas.ToList();
+        var disciplina = _context.Disciplinas?.ToList();
         if(disciplina is null)
             return NotFound("Achamo não, parcero");
 
@@ -34,7 +34,7 @@ namespace apiUniversidade.Controllers
         [HttpGet("{id:int}", Name="GetDisciplina")]
         public ActionResult<Disciplina> Get(int id)
         {
-            var disciplina = _context.Disciplinas.FirstOrDefault(p => p.Id == id);
+            var disciplina = _context.Disciplinas?.FirstOrDefault(p => p.Id == id);
             if(disciplina is null)
                 return NotFound("Tem não, parceiro");
             return disciplina;
@@ -42,7 +42,7 @@ namespace apiUniversidade.Controllers
 
         [HttpPost]
         public ActionResult Post(Disciplina disciplina){
-            _context.Disciplinas.Add(disciplina);
+            _context.Disciplinas?.Add(disciplina);
             _context.SaveChanges();
             
             return new CreatedAtRouteResult("GetDisciplina", 
@@ -64,12 +64,12 @@ namespace apiUniversidade.Controllers
         [HttpDelete("{id:int}")]
         public ActionResult Delete(int id)
         {
-            var disciplina = _context.Disciplinas.FirstOrDefault(p => p.Id == id);
+            var disciplina = _context.Disciplinas?.FirstOrDefault(p => p.Id == id);
 
             if(disciplina is null)
                 return NotFound();
 
-            _context.Disciplinas.Remove(disciplina);
+            _context.Disciplinas?.Remove(disciplina);
             _context.SaveChanges();
 
             return Ok(disciplina);           

@@ -25,7 +25,7 @@ namespace apiUniversidade.Controllers
 
         public ActionResult<IEnumerable<Curso>> Get()
         {
-            var curso = _context.Cursos.ToList();
+            var curso = _context.Cursos?.ToList();
             if(curso is null)
                 return NotFound();
             
@@ -35,7 +35,7 @@ namespace apiUniversidade.Controllers
         [HttpGet("{id:int}", Name="GetCurso")]
         public ActionResult<Curso> Get(int id)
         {
-            var curso = _context.Cursos.FirstOrDefault(p => p.Id == id);
+            var curso = _context.Cursos?.FirstOrDefault(p => p.Id == id);
             if(curso is null)
                 return NotFound("Tem não, parceiro");
             return curso;
@@ -43,7 +43,7 @@ namespace apiUniversidade.Controllers
 
         [HttpPost]
         public ActionResult Post(Curso curso){
-            _context.Cursos.Add(curso);
+            _context.Cursos?.Add(curso);
             _context.SaveChanges();
             
             return new CreatedAtRouteResult("GetCurso", 
@@ -65,12 +65,12 @@ namespace apiUniversidade.Controllers
         [HttpDelete("{id:int}")]
         public ActionResult Delete(int id)
         {
-            var curso = _context.Cursos.FirstOrDefault(p => p.Id == id);
+            var curso = _context.Cursos?.FirstOrDefault(p => p.Id == id);
 
             if(curso is null)
                 return NotFound();
 
-            _context.Cursos.Remove(curso);
+            _context.Cursos?.Remove(curso);
             _context.SaveChanges();
 
             return Ok(curso);           
