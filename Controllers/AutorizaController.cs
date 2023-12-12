@@ -2,14 +2,14 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using apiUniversidade.DTO;
 using System.Security.Claims;
-using System;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
+using System.IdentityModel.Tokens.Jwt;
 
 namespace apiUniversidade.Controllers
 {
     [ApiController]
-    [Route("[controller]")]
-    
-    
+    [Route("[controller]")]    
     public class AutorizaController : Controller
     {
         private readonly IConfiguration _configuration;
@@ -27,8 +27,31 @@ namespace apiUniversidade.Controllers
             var claims = new[]{
                 new Claim(System.IdentityModel.Tokens.Jwt.JwtRegisteredClaimNames.UniqueName, userInfo.Email),
                 new Claim("IFRN", "TecInfo"),
-                new Claim(Microsoft.IdentityModel)
-                        };
+                new Claim(Microsoft.IdentityModel.JsonWebTokens.JwtRegisteredClaimNames.Jti,Guid.NewGuid().ToString())
+                };
+
+            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:key"]));
+
+            var credentials = new SigningCredentials(key,SecurityAlgorithms.HmacSha256);
+
+            var expiracao = _configuration["TokenConfiguration:Expirehours"];
+            var expiration = DateTime.UtcNow.AddHours(double.Parse(expiracao));
+
+            JwtSecurityToken token = new JwtSecurityToken(
+                issuer: _configuration["TokenConfiguration:Issuer"],
+                audience: _configuration["TokenConfiguration:Issuer"],
+                claims: claims,
+                expires: expiration,
+                signingCredentials: credentials
+            );
+
+            return new UserToken(){
+                Authenticated = true,
+                Expiration = expiration,
+                Token = new JwtSecurityTokenHandler().WriteToken(token),
+                Message = "JWT Ok"
+            };
+
         }
 
         [HttpGet]
@@ -52,8 +75,7 @@ namespace apiUniversidade.Controllers
                 return BadRequest(result.Errors);
 
                 await _signInManager.SignInAsync(user, false);
-                    //return Ok(GerarToken(model));
-                    return Ok();
+                    return Ok(GerarToken(model));
             }
 
         [HttpPost("login")]
@@ -64,7 +86,7 @@ namespace apiUniversidade.Controllers
 
             if(result.Succeeded)
             {
-                return Ok();
+                return Ok(GerarToken(userInfo));                
             }
             else
             {
