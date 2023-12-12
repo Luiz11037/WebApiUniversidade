@@ -39,7 +39,7 @@ namespace apiUniversidade.Controllers
 
             JwtSecurityToken token = new JwtSecurityToken(
                 issuer: _configuration["TokenConfiguration:Issuer"],
-                audience: _configuration["TokenConfiguration:Issuer"],
+                audience: _configuration["TokenConfiguration:Audience"],
                 claims: claims,
                 expires: expiration,
                 signingCredentials: credentials
